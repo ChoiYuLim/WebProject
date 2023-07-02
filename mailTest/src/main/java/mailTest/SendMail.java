@@ -1,6 +1,7 @@
 package mailTest;
 
 import java.util.Properties;
+import java.util.Random;
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -8,14 +9,11 @@ import javax.mail.internet.MimeMessage;
 
 public class SendMail {
 
-    public static void main(String[] args) {
-        naverMailSend();
-    }
-
-    public static void naverMailSend() {
+    public static String naverMailSend(String email) {
+        String verificationCode = "";
         String host = "smtp.naver.com"; // 네이버 SMTP 서버
         String user = "yu_limmi_@naver.com"; // 네이버 계정
-        String password = "실제 내 비밀번호"; // 네이버 계정 비밀번호
+        String password = ""; // 네이버 계정 비밀번호
 
         // SMTP 서버 정보를 설정한다.
         Properties props = new Properties();
@@ -37,14 +35,17 @@ public class SendMail {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
-            message.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("yu_limmi_@naver.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 
             // 메일 제목
             message.setSubject("SMTP TEST");
 
-            // 메일 내용
-            message.setText("TEST Success!!");
+            // 인증 번호 생성
+            verificationCode = generateVerificationCode();
+
+            // 메일 내용에 인증 번호 추가
+            String mailContent = "TEST MAIL \n인증 번호는 " + verificationCode + "입니다.";
+            message.setText(mailContent);
 
             // 메일 전송
             Transport.send(message);
@@ -55,5 +56,22 @@ public class SendMail {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+
+        return verificationCode;
     }
+
+    public static String generateVerificationCode() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+
+        // 6자리의 난수 생성
+        for (int i = 0; i < 6; i++) {
+            int digit = random.nextInt(10);
+            sb.append(digit);
+        }
+
+        return sb.toString();
+    }
+
+
 }
