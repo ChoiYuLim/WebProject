@@ -2,6 +2,7 @@ package mailTest;
 
 import java.util.Properties;
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -49,6 +50,8 @@ public class SendMail {
             Transport.send(message);
             System.out.println("Success Message Sent");
 
+        } catch (AddressException e) {
+            e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
