@@ -8,4 +8,6 @@ public interface IScoreService {
     public List<Score> GetScoreList();
 
     public void AddScore(Score score);
+
+    Score GetScoreById(String id);
 }

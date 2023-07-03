@@ -16,6 +16,9 @@ import model.Score;
 @WebServlet("/score/*")
 public class RestScore extends HttpServlet {
 
+    /**
+     * 
+     */
     private static final long serialVersionUID = 1L;
     private IScoreService scoreService = new GlobalMemoryScoreService();
 
@@ -31,14 +34,24 @@ public class RestScore extends HttpServlet {
             // Get all scores
             List<Score> scores = scoreService.GetScoreList();
             response.setContentType(MediaType.APPLICATION_JSON);
-            response.getWriter().println(scores);
+            for (Score score : scores) {
+                response.getWriter().println(score.getUserId() + " " + score.getScore());
+            }
+
         } else if (pathInfo.startsWith("/add/")) {
             // Add a new score
             String[] parts = pathInfo.split("/");
             if (parts.length == 4) {
                 String id = parts[2];
-                int score = Integer.parseInt(parts[3]);
-                scoreService.AddScore(new Score(id, score));
+                int scoreValue = Integer.parseInt(parts[3]);
+                Score existingScore = scoreService.GetScoreById(id);
+                if (existingScore != null) {
+                    int currentScore = existingScore.getScore();
+                    int newScore = currentScore + scoreValue;
+                    existingScore.setScore(newScore);
+                } else {
+                    scoreService.AddScore(new Score(id, scoreValue));
+                }
                 response.setContentType(MediaType.APPLICATION_JSON);
                 response.getWriter().println("[{\"Result\":\"true\"}]");
             } else {
