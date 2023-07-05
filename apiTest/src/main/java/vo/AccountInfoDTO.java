@@ -3,7 +3,6 @@ package vo;
 import java.util.Date;
 
 public class AccountInfoDTO {
-    private String id;
     private String memberId;
     private String accountNumber;
     private String accountPassword;
@@ -14,11 +13,10 @@ public class AccountInfoDTO {
     private String bankCode;
     private Date regDate;
 
-    public AccountInfoDTO(String id, String memberId, String accountNumber, String accountPassword,
+    public AccountInfoDTO(String memberId, String accountNumber, String accountPassword,
             int balance, String nickname, int accountType, int accountStatus, String bankCode,
             Date regDate) {
         super();
-        this.id = id;
         this.memberId = memberId;
         this.accountNumber = accountNumber;
         this.accountPassword = accountPassword;
@@ -28,14 +26,6 @@ public class AccountInfoDTO {
         this.accountStatus = accountStatus;
         this.bankCode = bankCode;
         this.regDate = regDate;
-    }
-    
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getMemberId() {

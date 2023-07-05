@@ -1,47 +1,58 @@
-package dao;
+package repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import vo.AccountInfoDTO;
 
-public class AccountInfoDAO {
-    private DataSource ds;
+public class AccountInfoRepositoryImpl implements AccountInfoRepository {
 
     Connection conn = null;
-    PreparedStatement pstmt = null;
     ResultSet rs = null;
+    private static AccountInfoRepositoryImpl instance = null;
+    private DataSource dataSource;
+    private PreparedStatement pstmt; // PreparedStatement 필드로 선언
 
     String id = null, memberId = null, accountNumber = null, accountPassword = null,
             nickname = null, bankCode = null;
     int balance = 0, accountType = 1, accountStatus;
     Date regDate = null;
 
-    public AccountInfoDAO() {
+    private AccountInfoRepositoryImpl() {
         try {
-            Context ctx = new InitialContext();
-            ds = (DataSource) ctx.lookup("java:comp/env/jdbc/oracle");
+            InitialContext initContext = new InitialContext();
+            dataSource = (DataSource) initContext.lookup("java:comp/env/jdbc/oracle");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // BOARD 리스트 전부 불러오는 함수
-    public ArrayList<AccountInfoDTO> getAllList() {
+    public static AccountInfoRepositoryImpl getInstance() {
+        if (instance == null) {
+            synchronized (AccountInfoRepositoryImpl.class) {
+                if (instance == null) {
+                    instance = new AccountInfoRepositoryImpl();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public ArrayList<AccountInfoDTO> getAllMyList(String jumin_num) {
         ArrayList<AccountInfoDTO> dtos = new ArrayList<AccountInfoDTO>();
-        System.out.println("여기 왔음");
         try {
-            conn = ds.getConnection();
-            pstmt = conn.prepareStatement("SELECT * FROM ACCOUNT_INFO");
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement("SELECT * FROM account_info");
+
+
+            // pstmt.setString(1, jumin_num);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                id = rs.getString("ID");
                 memberId = rs.getString("MEMBER_ID");
                 accountNumber = rs.getString("ACCOUNT_NUMBER");
                 accountPassword = rs.getString("ACCOUNT_PASSWORD");
@@ -52,9 +63,8 @@ public class AccountInfoDAO {
                 bankCode = rs.getString("BANK_CODE");
                 regDate = rs.getDate("REG_DATE");
 
-                AccountInfoDTO dto =
-                        new AccountInfoDTO(id, memberId, accountNumber, accountPassword, balance,
-                                nickname, accountType, accountStatus, bankCode, regDate);
+                AccountInfoDTO dto = new AccountInfoDTO(memberId, accountNumber, accountPassword,
+                        balance, nickname, accountType, accountStatus, bankCode, regDate);
                 dtos.add(dto);
                 System.out.println(dto);
             }
@@ -75,4 +85,8 @@ public class AccountInfoDAO {
 
         return dtos;
     }
+
+
+
+
 }
