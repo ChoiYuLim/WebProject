@@ -33,10 +33,7 @@ public class AccountInfoController extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<AccountInfoDTO> accountList = accountInfoServiceImpl.getMyAllAccountInfo(""); // AccountInfoDAO를
-        // 사용하여
-        // 계정
-        // 정보 조회
+        ArrayList<AccountInfoDTO> accountList = accountInfoServiceImpl.getMyAllAccountInfo("");
         Gson gson = new Gson();
         String jsonAccountList = gson.toJson(accountList);
 
@@ -45,6 +42,13 @@ public class AccountInfoController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         out.print(jsonAccountList);
         out.flush();
+    }
+
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        accountInfoServiceImpl.getOtherPut();
     }
 
 

@@ -1,10 +1,10 @@
 package service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import repository.AccountInfoRepository;
 import repository.AccountInfoRepositoryImpl;
@@ -21,45 +21,43 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     }
 
-//    @Override
-//    public ArrayList<AccountInfoDTO> getOtherAllAccountInfo(String jumin_num) {
-//        try {
-//            // 요청 URL
-//            String url = "https://gwanjungbank.loca.lt/Board/write_view.do";
-//
-//            // URL 객체 생성
-//            URL requestUrl = new URL(url);
-//
-//            // HttpURLConnection 생성 및 설정
-//            HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-//            connection.setRequestMethod("GET");
-//
-//            // 응답 코드 확인
-//            int responseCode = connection.getResponseCode();
-//            if (responseCode == HttpURLConnection.HTTP_OK) {
-//                // 응답 본문 읽기
-//                BufferedReader reader =
-//                        new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//                StringBuilder response = new StringBuilder();
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    response.append(line);
-//                }
-//                reader.close();
-//
-//                // 응답 결과 출력
-//                System.out.println(response.toString());
-//            } else {
-//                System.out.println("Error: " + responseCode);
-//            }
-//
-//            // 연결 종료
-//            connection.disconnect();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//
-//    }
+    @Override
+    public void getOtherPut() {
+        try {
+            // 요청을 보낼 URL 생성
+            URL url = new URL("https://gwanjungbank.loca.lt/RestfulApi/account");
+
+            // HttpURLConnection 객체 생성 및 설정
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setDoOutput(true);
+
+            // 요청 데이터 생성
+            String requestData =
+                    "{\"accountNumber1\":\"A123\", \"accountNumber2\":\"B456\", \"tranAmt\":1000}";
+
+            // 요청 데이터를 바이트 배열로 변환
+            byte[] postData = requestData.getBytes(StandardCharsets.UTF_8);
+
+            // 요청 본문에 데이터 쓰기
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(postData);
+            outputStream.flush();
+            outputStream.close();
+
+            // 응답 코드 확인
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("PUT request succeeded.");
+            } else {
+                System.out.println("PUT request failed. Response Code: " + responseCode);
+            }
+
+            // 연결 종료
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
