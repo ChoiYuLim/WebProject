@@ -1,14 +1,11 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 import vo.AccountInfoDTO;
 
 public interface AccountInfoService {
 
-    // 모든 계좌정보 가져오기
-    ArrayList<AccountInfoDTO> getMyAllAccountInfo(String jumin_num);
-
-    // 관중 계좌정보 가져오기
-    void getOtherPut();
+    // 멤버 아이디로 계좌 가져오기
+    public List<AccountInfoDTO> findAccountsByMemberId(String memberId);
 
 }

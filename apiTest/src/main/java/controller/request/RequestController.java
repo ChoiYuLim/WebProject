@@ -1,4 +1,4 @@
-package controller;
+package controller.request;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -16,13 +16,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import vo.AccountInfoDTO;
 
-@WebServlet("/start")
-public class A_BankClient extends HttpServlet {
+@WebServlet("/accounts")
+public class RequestController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
 
-    public A_BankClient() {
+    public RequestController() {
         super();
     }
 
@@ -59,8 +59,4 @@ public class A_BankClient extends HttpServlet {
         response.getWriter().write(gson.toJson(accountInfos));
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
 }
