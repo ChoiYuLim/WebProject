@@ -3,29 +3,39 @@ package vo;
 import java.util.Date;
 
 public class AccountInfoDTO {
-    private String memberId;
     private String accountNumber;
+    private String memberId;
+    private String bankCode;
+    private String branchCode;
     private String accountPassword;
-    private int balance = 0;
+    private int balance;
     private String nickname;
     private int accountType;
-    private int accountStatus = 1;
-    private String bankCode;
+    private int accountStatus;
     private Date regDate;
 
-    public AccountInfoDTO(String memberId, String accountNumber, String accountPassword,
-            int balance, String nickname, int accountType, int accountStatus, String bankCode,
-            Date regDate) {
-        super();
-        this.memberId = memberId;
+
+    public AccountInfoDTO(String accountNumber, String memberId, String bankCode, String branchCode,
+            String accountPassword, int balance, String nickname, int accountType,
+            int accountStatus, Date regDate) {
         this.accountNumber = accountNumber;
+        this.memberId = memberId;
+        this.bankCode = bankCode;
+        this.branchCode = branchCode;
         this.accountPassword = accountPassword;
         this.balance = balance;
         this.nickname = nickname;
         this.accountType = accountType;
         this.accountStatus = accountStatus;
-        this.bankCode = bankCode;
         this.regDate = regDate;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getMemberId() {
@@ -36,12 +46,12 @@ public class AccountInfoDTO {
         this.memberId = memberId;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getBranchCode() {
+        return branchCode;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
     }
 
     public String getAccountPassword() {
@@ -99,6 +109,4 @@ public class AccountInfoDTO {
     public void setRegDate(Date regDate) {
         this.regDate = regDate;
     }
-
-
 }

@@ -18,7 +18,7 @@ public class AccountInfoRepositoryImpl implements AccountInfoRepository {
     private PreparedStatement pstmt; // PreparedStatement 필드로 선언
 
     String id = null, memberId = null, accountNumber = null, accountPassword = null,
-            nickname = null, bankCode = null;
+            nickname = null, bankCode = null, branchCode = null;
     int balance = 0, accountType = 1, accountStatus;
     Date regDate = null;
 
@@ -58,13 +58,15 @@ public class AccountInfoRepositoryImpl implements AccountInfoRepository {
                 accountPassword = rs.getString("ACCOUNT_PASSWORD");
                 balance = rs.getInt("BALANCE");
                 nickname = rs.getString("NICKNAME");
+                branchCode = rs.getString("branchCode");
                 accountType = rs.getInt("ACCOUNT_TYPE");
                 accountStatus = rs.getInt("ACCOUNT_STATUS");
                 bankCode = rs.getString("BANK_CODE");
                 regDate = rs.getDate("REG_DATE");
 
-                AccountInfoDTO dto = new AccountInfoDTO(memberId, accountNumber, accountPassword,
-                        balance, nickname, accountType, accountStatus, bankCode, regDate);
+                AccountInfoDTO dto = new AccountInfoDTO(accountNumber, memberId, bankCode,
+                        branchCode, accountPassword, balance, nickname, accountType, accountStatus,
+                        regDate);
                 dtos.add(dto);
                 System.out.println(dto);
             }
@@ -85,7 +87,6 @@ public class AccountInfoRepositoryImpl implements AccountInfoRepository {
 
         return dtos;
     }
-
 
 
 
