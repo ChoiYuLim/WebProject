@@ -14,10 +14,14 @@ public class AccountInfoDTO {
     private int accountStatus;
     private Date regDate;
 
+    public AccountInfoDTO() {
+
+    }
 
     public AccountInfoDTO(String accountNumber, String memberId, String bankCode, String branchCode,
             String accountPassword, int balance, String nickname, int accountType,
             int accountStatus, Date regDate) {
+        super();
         this.accountNumber = accountNumber;
         this.memberId = memberId;
         this.bankCode = bankCode;
