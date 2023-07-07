@@ -2,7 +2,6 @@ package vo;
 
 public class AccountTransferInfoDTO {
     private String transferId;
-    private String memberId;
     private String accountNumber1;
     private String accountNumber2;
     private int tranAmt;
@@ -17,14 +16,6 @@ public class AccountTransferInfoDTO {
 
     public void setTransferId(String transferId) {
         this.transferId = transferId;
-    }
-
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
     }
 
     public String getAccountNumber1() {
