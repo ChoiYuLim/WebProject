@@ -17,12 +17,12 @@ import okhttp3.Response;
 import vo.AccountInfoDTO;
 
 @WebServlet("/accounts")
-public class RequestController extends HttpServlet {
+public class AccountInfoRequestController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
 
-    public RequestController() {
+    public AccountInfoRequestController() {
         super();
     }
 

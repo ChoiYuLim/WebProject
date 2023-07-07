@@ -21,13 +21,13 @@ import vo.AccountInfoDTO;
  * Servlet implementation class AccountController
  */
 @WebServlet("/accounts-response")
-public class ResponseController extends HttpServlet {
+public class AccountInfoResponseController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final Gson gson = new Gson();
     private final MemberService memberService = new MemberServiceImpl();
     private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
 
-    public ResponseController() {
+    public AccountInfoResponseController() {
         super();
     }
 
