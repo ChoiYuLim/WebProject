@@ -33,9 +33,20 @@ public class AccountInfoController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     // OkHttpClient와 Gson 객체 생성
     private final OkHttpClient client = new OkHttpClient();
-    private final Gson gson=new GsonBuilder().registerTypeAdapter(Date.class,new JsonDeserializer<Date>(){DateFormat df=new SimpleDateFormat("MMM dd, yyyy",Locale.ENGLISH);
+    private final Gson gson =
+            new GsonBuilder().registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                DateFormat df = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
 
-    @Override public Date deserialize(final JsonElement json,final Type typeOfT,final JsonDeserializationContext context)throws JsonParseException{try{return df.parse(json.getAsString());}catch(ParseException e){throw new JsonParseException(e);}}}).create();
+                @Override
+                public Date deserialize(final JsonElement json, final Type typeOfT,
+                        final JsonDeserializationContext context) throws JsonParseException {
+                    try {
+                        return df.parse(json.getAsString());
+                    } catch (ParseException e) {
+                        throw new JsonParseException(e);
+                    }
+                }
+            }).create();
 
     public AccountInfoController() {
         super();
@@ -50,8 +61,9 @@ public class AccountInfoController extends HttpServlet {
         List<AccountInfoDTO> accountInfos = new ArrayList<>();
 
         // 개별 은행 서버 URL 리스트 13.125.243.120/gwanjung/account
-        List<String> bankApiUrls = List.of("http://13.125.243.120/gwanjung");
-        
+        List<String> bankApiUrls =
+                List.of("http://13.125.243.120/gwanjung", "http://43.202.60.52/yurim");
+
 
         // 각 은행의 API로 요청을 보내고 응답 받아와 List에 추가
         for (String bankApiUrl : bankApiUrls) {
@@ -71,7 +83,7 @@ public class AccountInfoController extends HttpServlet {
     private String sendGetRequest(String url, String personalIdNumber) throws IOException {
         // OkHttp를 이용해 Get 요청
         Request request = new Request.Builder()
-                .url(url + "/account?personalIdNumber=" + personalIdNumber).get().build();
+                .url(url + "/accounts-response?personalIdNumber=" + personalIdNumber).get().build();
 
         // 요청 보내고 응답 받기
         try (Response response = client.newCall(request).execute()) {
@@ -81,10 +93,5 @@ public class AccountInfoController extends HttpServlet {
                 throw new IOException("Unexpected code " + response);
             }
         }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
     }
 }
