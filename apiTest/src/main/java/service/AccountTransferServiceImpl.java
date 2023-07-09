@@ -1,7 +1,9 @@
 package service;
 
+import java.util.List;
 import repository.AccountTransferRepository;
 import repository.AccountTransferRepositoryImpl;
+import vo.AccountTransferInfoDTO;
 
 public class AccountTransferServiceImpl implements AccountTransferService {
 
@@ -23,10 +25,16 @@ public class AccountTransferServiceImpl implements AccountTransferService {
     @Override
     public void insertTransferInfo(String accountNumber1, String bankCode1, String accountNumber2,
             String bankCode2, int amount, String content, String string) {
-        // TODO Auto-generated method stub
+
         AccountTransferRepository repository = AccountTransferRepositoryImpl.getInstance();
         repository.insertTransgerInfo(accountNumber1, bankCode1, accountNumber2, bankCode2, amount,
                 content, string);
+    }
+
+    @Override
+    public List<AccountTransferInfoDTO> findTransferInfoByAccountNumber(String accountNumber) {
+        AccountTransferRepository repository = AccountTransferRepositoryImpl.getInstance();
+        return repository.findTransferInfoByAccountNumber(accountNumber);
     }
 
 }

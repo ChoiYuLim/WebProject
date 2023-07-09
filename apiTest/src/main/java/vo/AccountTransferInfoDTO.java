@@ -10,6 +10,20 @@ public class AccountTransferInfoDTO {
     private String tranDate;
     private String tranTime;
 
+
+    public AccountTransferInfoDTO(String transferId, String accountNumber1, String accountNumber2,
+            int tranAmt, String content, String inoutType, String tranDate, String tranTime) {
+        super();
+        this.transferId = transferId;
+        this.accountNumber1 = accountNumber1;
+        this.accountNumber2 = accountNumber2;
+        this.tranAmt = tranAmt;
+        this.content = content;
+        this.inoutType = inoutType;
+        this.tranDate = tranDate;
+        this.tranTime = tranTime;
+    }
+
     public String getTransferId() {
         return transferId;
     }

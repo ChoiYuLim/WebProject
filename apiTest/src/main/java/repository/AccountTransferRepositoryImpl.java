@@ -3,13 +3,16 @@ package repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import vo.AccountInfoDTO;
+import vo.AccountTransferInfoDTO;
 
 public class AccountTransferRepositoryImpl implements AccountTransferRepository {
 
     private static AccountTransferRepositoryImpl instance = null;
-    // C:\SQLDEV
-    // "jdbc:oracle:thin:@dinkdb_medium?TNS_ADMIN=/opt/wallet/Wallet_DinkDB";
     private final String DB_URL =
             "jdbc:oracle:thin:@dinkdb_medium?TNS_ADMIN=/opt/wallet/Wallet_DinkDB"; // 데이터베이스 url
     private final String USER = "DA2321";
@@ -99,5 +102,32 @@ public class AccountTransferRepositoryImpl implements AccountTransferRepository 
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<AccountTransferInfoDTO> findTransferInfoByAccountNumber(String accountNumber) {
+        List<AccountTransferInfoDTO> accountTransferInfos = new ArrayList<>();
+        String query = "SELECT * FROM accounttransferinfo_hana WHERE account_Number = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, accountNumber);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    AccountTransferInfoDTO accountTransferInfo = new AccountTransferInfoDTO(
+                            rs.getString("transfer_id"), rs.getString("account_Number1"),
+                            rs.getString("account_Number2"), rs.getInt("tran_Amt"),
+                            rs.getString("content"), rs.getString("inout_Type"),
+                            rs.getString("tran_Date"), rs.getString("tran_Time"));
+                    accountTransferInfos.add(accountTransferInfo);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return accountTransferInfos;
+    }
+
 
 }

@@ -7,14 +7,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.AccountTransferService;
 import service.AccountTransferServiceImpl;
+import vo.AccountInfoDTO;
+import vo.AccountTransferInfoDTO;
 import java.io.IOException;
+import java.util.List;
+import com.google.gson.Gson;
 
 /**
  * Servlet implementation class AccountTransferInfoResponseController
  */
-@WebServlet({"/withdraw", "/deposit"})
+@WebServlet({"/withdraw", "/deposit", "/accounts-transfer-response"})
 public class AccountTransferInfoResponseController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private final Gson gson = new Gson();
 
     // AccountTransferService 객체 추가 (예시, 실제로는 적절히 구현이 필요합니다.)
     private AccountTransferService accountTransferService = new AccountTransferServiceImpl();
@@ -23,9 +28,24 @@ public class AccountTransferInfoResponseController extends HttpServlet {
         super();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        response.getWriter().append("Served at: ").append(request.getContextPath());
+        String uri = req.getRequestURI();
+        String comPath = req.getContextPath();
+        String command = uri.substring(comPath.length());
+        if (command.equals("/accounts-transfer-response")) {
+            String accountNumber = req.getParameter("accountNumber");
+
+            List<AccountTransferInfoDTO> accountInfos =
+                    accountTransferService.findTransferInfoByAccountNumber(accountNumber);
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(gson.toJson(accountInfos));
+
+        }
+
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
